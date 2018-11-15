@@ -1,15 +1,20 @@
-﻿# CC254x
+﻿# [motion](https://github.com/qitas/motion) 
 
-[![sites](docs/Q.png)](http://qitas.cn)
+### qitas@qitas.cn
 
-## 描述
+---
 
-CC254x是TI的低成本4.0 BLE芯片，集成8051内核，使用OSAL软件架构，IAR for 8051进行开发，是目前市面上价格最优的蓝牙产品之一，可用于简单的边缘节点进行数据采集
+## 简介
+
+基于CC2541的运动感知
+
+---
 
 ## 组成
 
 
+---
 
-## 说明
+## 为锻造最美之器
 
-
+[![sites](qitas/qitas.png)](http://www.qitas.cn)

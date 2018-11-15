@@ -1041,19 +1041,19 @@ uint8 osal_int_disable( uint8 interrupt_id )
 uint8 osal_init_system( void )
 {
   // Initialize the Memory Allocation System
-  osal_mem_init();//初始化内存分配系统
+  osal_mem_init();
 
   // Initialize the message queue
-  osal_qHead = NULL;//初始化消息队列
+  osal_qHead = NULL;
 
   // Initialize the timers
-  osalTimerInit();//初始化定时器
+  osalTimerInit();
 
   // Initialize the Power Management System
-  osal_pwrmgr_init();//初始化电源管理系统
+  osal_pwrmgr_init();
 
   // Initialize the system tasks.
-  osalInitTasks();//初始化系统任务， 这一个任务初始花非常关键
+  osalInitTasks();
 
   // Setup efficient search for the first free block of heap.
   osal_mem_kick();
@@ -1105,36 +1105,36 @@ void osal_run_system( void )
   osalTimeUpdate();
 #endif
   
-  Hal_ProcessPoll();    //查询数据，比如串口数据，usb数据等
+  Hal_ProcessPoll();
 
-  do { // 训环寻找是否有事件，有事件的话，就立马退出，app应用优先级最低
+  do {
     if (tasksEvents[idx])  // Task is highest priority that is ready.
     {
       break;
     }
   } while (++idx < tasksCnt);
 
-  if (idx < tasksCnt)// 找到了事件
+  if (idx < tasksCnt)
   {
     uint16 events;
     halIntState_t intState;
 
-    HAL_ENTER_CRITICAL_SECTION(intState);  // 关闭中断
-    events = tasksEvents[idx];        //读取该任务的事件(事件可能不止1个)
-    tasksEvents[idx] = 0; // 清除时间记录，在执行任务处理函数期间有可置上新事件
-    HAL_EXIT_CRITICAL_SECTION(intState);   // 开启中断
+    HAL_ENTER_CRITICAL_SECTION(intState);
+    events = tasksEvents[idx];
+    tasksEvents[idx] = 0;  // Clear the Events for this task.
+    HAL_EXIT_CRITICAL_SECTION(intState);
 
     activeTaskID = idx;
-    events = (tasksArr[idx])( idx, events );// tasksArr 是任务处理函数指针
+    events = (tasksArr[idx])( idx, events );
     activeTaskID = TASK_NO_TASK;
 
-    HAL_ENTER_CRITICAL_SECTION(intState);// 关闭中断
+    HAL_ENTER_CRITICAL_SECTION(intState);
     tasksEvents[idx] |= events;  // Add back unprocessed events to the current task.
-    HAL_EXIT_CRITICAL_SECTION(intState);// 开启中断
+    HAL_EXIT_CRITICAL_SECTION(intState);
   }
 #if defined( POWER_SAVING )
   else  // Complete pass through all task events with no activity?
-  { // 系统睡眠， 以便达到低功耗的目的
+  {
     osal_pwrmgr_powerconserve();  // Put the processor/system into sleep
   }
 #endif
